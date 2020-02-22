@@ -1,0 +1,19 @@
+{
+  "name": "postgraphile_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node-pg-migrate"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@graphile/pg-pubsub": "^4.5.0",
+    "config": "^3.2.6",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "postgraphile": "^4.5.5"
+  }
+}
