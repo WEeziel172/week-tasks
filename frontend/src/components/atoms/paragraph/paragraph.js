@@ -9,6 +9,7 @@ const Paragraph = styled(animated.p)`
     &hover {
 
     }
+    color: ${props => props.color}
 
 `
 
