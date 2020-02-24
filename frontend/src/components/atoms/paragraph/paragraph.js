@@ -2,7 +2,7 @@ import React from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
-const Block = styled(animated.div)`
+const Paragraph = styled(animated.p)`
     margin: 0;
     padding: 0;
 
@@ -13,5 +13,5 @@ const Block = styled(animated.div)`
 `
 
 export {
-    Block
+    Paragraph
 }
