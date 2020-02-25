@@ -13,7 +13,19 @@ query GetAllTasks {
   }
 }
 `
-
+const GET_USER_WEEKLY_TASKS = gql`
+query GetUserWeeklyTasks($id: Int!) {
+  getUserWeeklyTasksFix(id: $id) {
+    nodes {
+      body
+      completed
+      date
+      id
+    }
+  }
+}
+`
 export {
-    GET_ALL_TASKS
+  GET_ALL_TASKS,
+  GET_USER_WEEKLY_TASKS
 }

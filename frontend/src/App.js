@@ -2,10 +2,11 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_ALL_TASKS } from './graphql/queries';
+import { GET_ALL_TASKS, GET_USER_WEEKLY_TASKS } from './graphql/queries';
 import { Block } from './components/atoms/block/block';
 import styled from "styled-components"
 import { Paragraph } from './components/atoms/paragraph/paragraph';
+import { Input } from './components/atoms/input/input';
 
 const Container = styled(Block)`
 width: 100%;
@@ -17,7 +18,6 @@ align-items: center;
 
 const List = styled(Block)`
 width: 40%;
-height: 50%;
 box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 border-radius: 10px;
 `
@@ -25,16 +25,14 @@ border-radius: 10px;
 const ListHeader = styled(Block)`
 width: 100%;
 border-radius: 10px 10px 0 0;
-height: 5rem;
-background: #f2f2ff;
+height: 3rem;
 display: flex;
-justify-content: center;
+justify-content: flex-end;
 align-items: center;
 `
 const Item = styled(Block)`
   width: 100%;
   height: 3rem;
-  background: #f9f9ff;
   border-bottom: 0.1px solid #f5f5f5;
   display: flex;
   align-items: center;
@@ -57,7 +55,7 @@ const ListItem = (props) => {
   return (
     <Item>
       <img width={"15px"} height={"15px"} src={"https://f0.pngfuel.com/png/817/856/red-and-black-arrow-logo-exclamation-mark-png-clip-art.png"} />
-      <Paragraph color={"#79d7dc"}>Siivoa</Paragraph>
+      <Paragraph color={"#bf6464"}>Siivoa</Paragraph>
     </Item>
   )
 }
@@ -65,13 +63,28 @@ const ListItem = (props) => {
 const ListItemsHeader = props => {
   return (
     <DayHeader>
-      <Paragraph color={"#bb407e"}>Maanantai</Paragraph>
+      <Paragraph color={"#bf6464"}>Maanantai</Paragraph>
     </DayHeader>
   )
 }
 
+const WeekInput = styled(Input)`
+width: 10rem;
+height: 2rem;
+border: none;
+margin-left: 3rem;
+`
+
+const WeekPicker = props => {
+
+  return (
+    <WeekInput type={"week"} />
+  )
+}
+
 function App() {
-  const { loading, error, data } = useQuery(GET_ALL_TASKS, {
+  const { loading, error, data } = useQuery(GET_USER_WEEKLY_TASKS, {
+    variables: { id: 1 },
     onCompleted: (data) => { return console.log(data) }
   });
 
@@ -81,8 +94,8 @@ function App() {
         <ListHeader>
           <Paragraph color={"#bf6464"}>
             Todo list
-
           </Paragraph>
+          <WeekPicker />
         </ListHeader>
         <ListItemsHeader />
         <ListItem>
