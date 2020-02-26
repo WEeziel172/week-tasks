@@ -10,3 +10,30 @@ CREATE function get_user_weekly_tasks_fix(id INTEGER)
     AND tasks."userId" = $1;
 
   $$ language sql stable;
+
+CREATE TRIGGER notify_of_tasks 
+    AFTER INSERT ON app_public.tasks
+    FOR EACH ROW
+    EXECUTE FUNCTION notify_user();
+
+
+CREATE OR REPLACE function notify_user() 
+  RETURNS TRIGGER AS
+    $BODY$
+      BEGIN
+        PERFORM pg_notify(
+          'graphql:hello:userId:'||NEW."userId",
+            json_build_object(
+              '__node__', json_build_array('tasks', NEW.id)
+            )::text
+        );
+      RETURN NEW;
+      END;
+    $BODY$ LANGUAGE plpgsql volatile;
+
+  
+  CREATE OR REPLACE type Subscription {
+    listen(topic: String!, user: Int!): ListenPayload!
+}
+
+CREATE TYPE 

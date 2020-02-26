@@ -2,7 +2,7 @@ const http = require("http");
 const express = require("express");
 const { postgraphile, makePluginHook } = require("postgraphile");
 const { default: PgPubsub } = require("@graphile/pg-pubsub");
-
+const MySubscriptionPlugin = require("./plugins/mySubscription"); // our plugin defined in previous step
 
 const user = "postgres";
 const pass = "1234";
@@ -23,6 +23,7 @@ console.log("\nPostgres origin URL for connection:\n", dbUrl);
 app.use(
     postgraphile(dbUrl, ["app_public"], {
         pluginHook,
+        appendPlugins: [MySubscriptionPlugin],
         exportGqlSchemaPath: "schema.graphql",
         legacyRelations: "omit",
         enableQueryBatching: true,
