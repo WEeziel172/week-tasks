@@ -861,8 +861,9 @@ type Query implements Node {
   userById(id: Int!): User
 
   """Reads and enables pagination through a set of `Task`."""
-  getUserWeeklyTasksFix(
+  getUserWeeklyTasksFixit(
     id: Int
+    week: Date
 
     """Only read the first `n` values of the set."""
     first: Int
@@ -1444,5 +1445,9 @@ enum UsersOrderBy {
 }
 
 type UserSubscriptionPayload {
-  event: Task
+  query: Query
+  relatedNode: Node
+  relatedNodeId: ID
+  task: Task
+  event: String
 }

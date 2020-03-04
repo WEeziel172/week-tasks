@@ -14,8 +14,8 @@ query GetAllTasks {
 }
 `
 const GET_USER_WEEKLY_TASKS = gql`
-query GetUserWeeklyTasks($id: Int!) {
-  getUserWeeklyTasksFix(id: $id) {
+query GetUserWeeklyTasksFixit($id: Int!, $week: Date!) {
+  getUserWeeklyTasksFixit(id: $id, week: $week) {
     nodes {
       body
       completed

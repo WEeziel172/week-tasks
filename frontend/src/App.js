@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useQuery } from '@apollo/react-hooks';
@@ -7,6 +7,7 @@ import { Block } from './components/atoms/block/block';
 import styled from "styled-components"
 import { Paragraph } from './components/atoms/paragraph/paragraph';
 import { Input } from './components/atoms/input/input';
+import * as moment from 'moment';
 
 const Container = styled(Block)`
 width: 100%;
@@ -77,17 +78,30 @@ margin-left: 3rem;
 
 const WeekPicker = props => {
 
+
+  const log = (e) => {
+    console.log(moment(e.target.value).toISOString())
+
+  }
   return (
-    <WeekInput type={"week"} />
+    <WeekInput onChange={(e) => props.onChange(e)} type={"week"} />
   )
 }
 
 function App() {
-  const { loading, error, data } = useQuery(GET_USER_WEEKLY_TASKS, {
-    variables: { id: 1 },
+
+  const [weekDate, setWeekDate] = useState(new Date())
+  const { loading, error, data, refetch } = useQuery(GET_USER_WEEKLY_TASKS, {
+    variables: { week: weekDate, id: 1 },
     onCompleted: (data) => { return console.log(data) }
   });
 
+  const log = (e) => {
+    const date = moment(e.target.value).toISOString()
+    setWeekDate(date)
+    refetch()
+
+  }
   return (
     <Container width={"50%"} height={"50%"}>
       <List>
@@ -95,7 +109,7 @@ function App() {
           <Paragraph color={"#bf6464"}>
             Todo list
           </Paragraph>
-          <WeekPicker />
+          <WeekPicker onChange={(e) => log(e)} />
         </ListHeader>
         <ListItemsHeader />
         <ListItem>

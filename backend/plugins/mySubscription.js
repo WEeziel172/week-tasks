@@ -15,10 +15,11 @@ const getTopic = (args, context, _resolveInfo) => {
 module.exports = makeExtendSchemaPlugin(({ pgSql: sql }) => ({
     typeDefs: gql`
     type UserSubscriptionPayload {
-      # This is populated by our resolver below
-
-      # This is returned directly from the PostgreSQL subscription payload (JSON object)
-      event: Task
+        query: Query
+        relatedNode: Node
+        relatedNodeId: ID
+        task: Task
+        event: String
     }
 
     extend type Subscription {
@@ -42,7 +43,23 @@ module.exports = makeExtendSchemaPlugin(({ pgSql: sql }) => ({
             // In a future release, we hope to enable you to replace this entire
             // method with a small schema directive above, should you so desire. It's
             // mostly boilerplate.
-
+            async user(
+                event,
+                _args,
+                _context,
+                { graphile: { selectGraphQLResultFromTable } }
+            ) {
+                const rows = await selectGraphQLResultFromTable(
+                    sql.fragment`app_public.tasks`,
+                    (tableAlias, sqlBuilder) => {
+                        console.log(event, _args)
+                        sqlBuilder.where(
+                            sql.fragment`${tableAlias}.id = ${sql.value(event.subject)}`
+                        );
+                    }
+                );
+                return rows[0];
+            },
         },
     },
 }));
